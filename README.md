@@ -22,7 +22,9 @@ npm install
 ```
 
 3. Crea el archivo `.env.local` con las variables de entorno:
-DATABASE_URL=tu_connection_string_de_neon
+```
+DATABASE_URL=postgresql://usuario:password@host/db?sslmode=require
+```
 
 4. Ejecuta el schema SQL en la consola de Neon (archivo `sql/schema.sql`)
 
