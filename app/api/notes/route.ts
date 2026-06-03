@@ -9,9 +9,15 @@ const noteSchema = z.object({
   color: z.string().optional(),
 });
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const notes = await query('SELECT * FROM notes ORDER BY created_at DESC');
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type');
+    
+    const notes = type
+      ? await query('SELECT * FROM notes WHERE type = $1 ORDER BY created_at DESC', [type])
+      : await query('SELECT * FROM notes ORDER BY created_at DESC');
+    
     return NextResponse.json(notes);
   } catch {
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });
