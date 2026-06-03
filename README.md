@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NoteFlow API
 
-## Getting Started
+API REST para la app móvil NoteFlow. Construida con Next.js, PostgreSQL en Neon y desplegada en Vercel.
 
-First, run the development server:
+## Stack tecnológico
+- Next.js 16 (App Router)
+- TypeScript
+- PostgreSQL (Neon DB)
+- Zod (validación)
 
+## Setup
+
+1. Clona el repositorio:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Gonzalo160124/noteflow-api.git
+cd noteflow-api
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Instala las dependencias:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Crea el archivo `.env.local` con las variables de entorno:
+DATABASE_URL=tu_connection_string_de_neon
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Ejecuta el schema SQL en la consola de Neon (archivo `sql/schema.sql`)
 
-## Learn More
+5. Arranca el servidor:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Variables de entorno
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Variable | Descripción |
+|----------|-------------|
+| DATABASE_URL | Connection string de PostgreSQL en Neon |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Endpoints
 
-## Deploy on Vercel
+### Notas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Método | Ruta | Body | Respuesta |
+|--------|------|------|-----------|
+| GET | /api/notes | - | Array de notas |
+| POST | /api/notes | `{ title, type, content?, color? }` | Nota creada (201) |
+| GET | /api/notes/:id | - | Nota por id |
+| PATCH | /api/notes/:id | `{ title?, content?, color? }` | Nota actualizada |
+| DELETE | /api/notes/:id | - | 204 No Content |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Checklist Items
+
+| Método | Ruta | Body | Respuesta |
+|--------|------|------|-----------|
+| GET | /api/notes/:id/checklist-items | - | Array de items |
+| POST | /api/notes/:id/checklist-items | `{ text }` | Item creado (201) |
+| PATCH | /api/checklist-items/:itemId | `{ is_completed }` | Item actualizado |
+| DELETE | /api/checklist-items/:itemId | - | 204 No Content |
+
+## Tipos de nota
+
+- `note` - Nota de texto con título y contenido
+- `checklist` - Lista de tareas con items completables
+- `idea` - Nota de idea con etiquetas y color
